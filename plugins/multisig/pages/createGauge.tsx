@@ -35,8 +35,8 @@ export default function Create() {
     resources: filteredResources,
   });
 
-  const { data: modeContracts } = useGetContracts(Token.MODE);
-  const { data: bptContracts } = useGetContracts(Token.BPT);
+  const { data: modeContracts } = useGetContracts(Token.MAIN_TOKEN);
+  const { data: bptContracts } = useGetContracts(Token.SECONDARY_TOKEN);
 
   const modeVoterContract = modeContracts?.voterContract.result;
   const bptVoterContract = bptContracts?.voterContract.result;
@@ -283,7 +283,7 @@ export default function Create() {
 
           <GaugeDetailsDialog
             selectedGauge={{
-              token: Token.MODE,
+              token: Token.MAIN_TOKEN,
               address: (gaugeAddress ?? zeroAddress) as Address,
               info: {
                 active: true,

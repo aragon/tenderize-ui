@@ -17,17 +17,17 @@ type VotingBarProps = {
 export const VotingBar: React.FC<VotingBarProps> = ({ selectedGauges, onRemove }) => {
   const { isConnected } = useAccount();
 
-  const { ownedTokens: modeOwnedTokensData } = useOwnedTokens(Token.MODE);
-  const { ownedTokens: bptOwnedTokensData } = useOwnedTokens(Token.BPT);
+  const { ownedTokens: modeOwnedTokensData } = useOwnedTokens(Token.MAIN_TOKEN);
+  const { ownedTokens: bptOwnedTokensData } = useOwnedTokens(Token.SECONDARY_TOKEN);
 
   const modeOwnedTokens = [...(modeOwnedTokensData ?? [])];
   const bptOwnedTokens = [...(bptOwnedTokensData ?? [])];
 
-  const { data: usedModeVp } = useGetUsedVp(Token.MODE, modeOwnedTokens);
-  const { data: usedBptVp } = useGetUsedVp(Token.BPT, bptOwnedTokens);
+  const { data: usedModeVp } = useGetUsedVp(Token.MAIN_TOKEN, modeOwnedTokens);
+  const { data: usedBptVp } = useGetUsedVp(Token.SECONDARY_TOKEN, bptOwnedTokens);
 
-  const { vp: modeVpBn } = useGetAccountVp(Token.MODE);
-  const { vp: bptVpBn } = useGetAccountVp(Token.BPT);
+  const { vp: modeVpBn } = useGetAccountVp(Token.MAIN_TOKEN);
+  const { vp: bptVpBn } = useGetAccountVp(Token.SECONDARY_TOKEN);
 
   if (!isConnected) {
     return null;

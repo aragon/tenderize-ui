@@ -1,9 +1,5 @@
 import { type Address } from "viem";
-
-export enum Token {
-  MODE,
-  BPT,
-}
+export { Token } from "../../stake/types/tokens";
 
 export type Gauge = {
   gauge: Address;

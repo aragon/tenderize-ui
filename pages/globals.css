@@ -87,7 +87,11 @@
     --ods-dialog-content-z-index: 30;
     --ods-dialog-alert-content-z-index: 30;
     --ods-dropdown-container-content-z-index: 40;
+
     --ods-text-area-rich-text-expanded-z-index: 50;
+
+    /* Component specific */
+    --ods-avatar-container-position: relative;
   }
 }
 
@@ -96,55 +100,74 @@ body {
   color: var(--ods-color-neutral-800);
   background-color: var(--ods-color-neutral-50);
 
-  font-family: var(--ods-font-family);
-  /* Custom font here */
-  /* font-family: "..."; */
+  /* font-family: var(--ods-font-family); */
 }
 
-/* Custom font here */
-/* body,span,p,ul,ol,div { */
-/* font-family: "..."; */
-/* } */
+/* FONTS */
+
+@font-face {
+  font-family: "IBMPlexMono";
+  src: url(/fonts/IBMPlexMono-Bold.ttf) format("truetype");
+  font-weight: 400;
+  style: "normal";
+}
+
+/* 
+@font-face {
+  font-family: "IBMPlexMono";
+  src: url(/fonts/IBMPlexMono-BoldItalic.ttf) format("truetype");
+  font-weight: 600;
+  style: "italic";
+} */
+
+@font-face {
+  font-family: "WorkSans";
+  src: url(/fonts/WorkSans-Regular.ttf) format("truetype");
+  font-weight: 400;
+  style: "normal";
+}
+
+html {
+  font-family: "WorkSans", Arial, Helvetica, sans-serif;
+  color: rgb(var(--ods-color-neutral-700));
+}
 
 h1,
 h2,
 h3,
 h4,
 h5,
-h6 {
-  /* Variables imported from layout.tsx > @aragon/ods */
-  color: var(--ods-color-neutral-800);
-
-  /* Custom font here */
-  /* font-family: "..."; */
-  /* font-weight: 600; */
+.title {
+  font-family: "IBMPlexMono";
+  text-transform: uppercase;
 }
 
-p,
-ul,
-ol {
-  /* Variables imported from layout.tsx > @aragon/ods */
-  color: var(--ods-color-neutral-600);
+a,
+button {
+  font-family: "IBMPlexMono";
+  text-transform: uppercase;
 }
 
-/* Inline alerts */
-div.inline-flex.items-center.gap-x-2.rounded p {
-  font-size: 14px !important;
-  font-weight: 400;
-  opacity: 0.8;
+p {
+  font-family: "WorkSans";
 }
 
-/* Smaller titles */
-label div p.leading-tight {
-  font-size: 1rem;
+.main-token-icon:before {
+  content: "";
+  display: inline-block;
+  background: url("/main-token-icon.png") no-repeat;
+  background-size: contain;
+  width: 20px;
+  height: 20px;
+  margin-right: -8px;
 }
 
-/* Dark mode snippet */
-/* 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 230, 230, 230;
-    --background-rgb: 45, 46, 52;
-  }
+.secondary-token-icon:before {
+  content: "";
+  display: inline-block;
+  background: url("/secondary-token-icon.png") no-repeat;
+  background-size: contain;
+  width: 20px;
+  height: 20px;
+  margin-right: -8px;
 }
-*/
