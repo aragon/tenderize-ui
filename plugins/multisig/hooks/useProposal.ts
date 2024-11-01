@@ -72,7 +72,7 @@ export function useProposal(proposalId: string, autoRefresh = false) {
         address: PUB_MULTISIG_PLUGIN_ADDRESS,
         event: ProposalCreatedEvent,
         args: { proposalId: BigInt(proposalId) },
-        fromBlock: proposalData.parameters.snapshotBlock,
+        fromBlock: BigInt(proposalData.parameters.snapshotBlock),
         toBlock: "latest",
       })
       .then((logs) => {

@@ -23,7 +23,7 @@ export function useProposalApprovals(pluginAddress: Address, proposalId: string,
       args: {
         proposalId: BigInt(proposalId),
       },
-      fromBlock: proposal.parameters.snapshotBlock,
+      fromBlock: BigInt(proposal.parameters.snapshotBlock),
       toBlock: "latest", // TODO: Make this variable between 'latest' and proposal last block
     });
 

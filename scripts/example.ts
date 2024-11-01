@@ -1,17 +1,16 @@
 import { toHex } from "viem";
 import { deploymentPublicClient as publicClient, deploymentWalletClient as walletClient } from "./lib/util/client";
 import { deploymentAccount as account } from "./lib/util/account";
-import { DelegateAnnouncerAbi } from "../plugins/members/artifacts/DelegationWall.sol";
+import { DaoAbi } from "../artifacts/DAO.sol";
 
 async function main() {
-  console.log("Emitting delegation event");
-  const message = "ipfs://...";
+  console.log("Executing");
 
   const { request } = await publicClient.simulateContract({
     address: "0xa119833aba78d4639c6ce6c2fe3ca4c7de02d710",
-    abi: DelegateAnnouncerAbi,
-    functionName: "register",
-    args: [toHex(message)],
+    abi: DaoAbi,
+    functionName: "execute",
+    args: [toHex(1), [], BigInt(0)],
     account,
   });
   const hash = await walletClient.writeContract(request);
@@ -20,7 +19,7 @@ async function main() {
 
   const receipt = await publicClient.waitForTransactionReceipt({ hash });
   if (!receipt) {
-    throw new Error("The Dual Governance plugin repository could not be created");
+    throw new Error("The transaction failed");
   }
 
   console.log("Done");

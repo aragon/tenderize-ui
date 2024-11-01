@@ -1,10 +1,17 @@
-import { AvatarIcon, Breadcrumbs, Heading, IBreadcrumbsLink, IconType, ProposalStatus, TagVariant } from "@aragon/ods";
+import {
+  AvatarIcon,
+  Breadcrumbs,
+  DateFormat,
+  formatterUtils,
+  Heading,
+  IBreadcrumbsLink,
+  IconType,
+  ProposalStatus,
+} from "@aragon/ods";
 import { MultisigProposal } from "@/plugins/multisig/utils/types";
 import { useProposalStatus } from "@/plugins/multisig/hooks/useProposalVariantStatus";
-import dayjs from "dayjs";
 import { HeaderSection } from "@/components/layout/header-section";
 import { Publisher } from "@/components/publisher";
-import { getSimpleRelativeTimeFromDate } from "@/utils/dates";
 import { Else, ElseIf, If, Then } from "@/components/if";
 import { getTagVariantFromStatus } from "@/utils/ui-variants";
 import { capitalizeFirstLetter } from "@/utils/text";
@@ -59,7 +66,9 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = ({ proposalId, proposal })
                 </ElseIf>
                 <Else>
                   <span className="text-neutral-800">
-                    {getSimpleRelativeTimeFromDate(dayjs(Number(proposal.parameters.endDate) * 1000))}
+                    {formatterUtils.formatDate(Number(proposal.parameters.endDate) * 1000, {
+                      format: DateFormat.RELATIVE,
+                    })}
                   </span>
                   <span className="text-neutral-500">left until expiration</span>
                 </Else>

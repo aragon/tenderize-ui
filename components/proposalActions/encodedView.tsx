@@ -1,5 +1,5 @@
 import { PUB_CHAIN } from "@/constants";
-import { capitalizeFirstLetter } from "@/utils/text";
+import { capitalizeFirstLetter } from "@/utils/case";
 import { type RawAction } from "@/utils/types";
 import { InputText, NumberFormat, formatterUtils } from "@aragon/ods";
 import { formatEther } from "viem";
