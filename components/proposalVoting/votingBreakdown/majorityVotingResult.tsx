@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter } from "@/utils/text";
+import { capitalizeFirstLetter } from "@/utils/case";
 import { Button, Heading, Progress, RadioCard, RadioGroup } from "@aragon/ods";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
