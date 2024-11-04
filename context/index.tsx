@@ -1,21 +1,27 @@
-import { AlertProvider } from "./Alerts";
-import type { ReactNode } from "react";
 import { QueryClient } from "@tanstack/react-query";
-import { config } from "@/context/Web3Modal";
-import { createWeb3Modal } from "@web3modal/wagmi/react";
-import { WagmiProvider, deserialize, serialize } from "wagmi";
 import { PUB_WALLET_CONNECT_PROJECT_ID } from "@/constants";
+import { config } from "@/context/Web3Modal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import { UseDerivedWalletProvider } from "../hooks/useDerivedWallet";
+import { createWeb3Modal } from "@web3modal/wagmi/react";
+import { type ReactNode } from "react";
+import { WagmiProvider, deserialize, serialize, type State } from "wagmi";
+import { AlertProvider } from "./Alerts";
 import { OdsModulesProvider } from "@aragon/ods";
 import { customModulesCopy, odsCoreProviderValues } from "@/components/ods-customizations";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { hashFn } from "@wagmi/core/query";
+import { If } from "@/components/if";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      gcTime: 1_000 * 60 * 60 * 24, // 24 hours
+      gcTime: 1_000 * 60 * 10, // 10 minutes
+      queryKeyHashFn: hashFn,
+      staleTime: 2_000 * 60, // 2 minutes
+      refetchOnMount: true,
+      refetchOnWindowFocus: false,
     },
   },
 });
@@ -31,7 +37,7 @@ createWeb3Modal({
   wagmiConfig: config,
   projectId: PUB_WALLET_CONNECT_PROJECT_ID,
   enableAnalytics: false, // Optional - defaults to your Cloud configuration
-  enableOnramp: true, // Optional
+  enableOnramp: false, // Optional
   themeMode: "light",
   allWallets: "SHOW",
   featuredWalletIds: [
@@ -42,21 +48,23 @@ createWeb3Modal({
   ],
 });
 
-export function RootContextProvider({ children }: { children: ReactNode }) {
+export function RootContextProvider({ children, initialState }: { children: ReactNode; initialState?: State }) {
   return (
-    <WagmiProvider config={config}>
-      <OdsModulesProvider
-        wagmiConfig={config}
-        queryClient={queryClient}
-        coreProviderValues={odsCoreProviderValues}
-        values={{ copy: customModulesCopy }}
-      >
-        <PersistQueryClientProvider client={queryClient} persistOptions={{ persister }}>
-          <AlertProvider>
-            <UseDerivedWalletProvider>{children}</UseDerivedWalletProvider>
-          </AlertProvider>
-        </PersistQueryClientProvider>
-      </OdsModulesProvider>
+    <WagmiProvider config={config} initialState={initialState}>
+      <PersistQueryClientProvider client={queryClient} persistOptions={{ persister }}>
+        <OdsModulesProvider
+          wagmiConfig={config}
+          queryClient={queryClient}
+          wagmiInitialState={initialState}
+          coreProviderValues={odsCoreProviderValues}
+          values={{ copy: customModulesCopy }}
+        >
+          <AlertProvider>{children}</AlertProvider>
+        </OdsModulesProvider>
+        <If val={process.env.NODE_ENV} is="development">
+          <ReactQueryDevtools initialIsOpen={false} />
+        </If>
+      </PersistQueryClientProvider>
     </WagmiProvider>
   );
 }

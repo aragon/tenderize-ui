@@ -1,58 +1,51 @@
+import { DashboardHeader } from "@/components/dashboard/header";
+import { DashboardResources } from "@/components/dashboard/resources";
 import { MainSection } from "@/components/layout/main-section";
-import { Button, IllustrationHuman } from "@aragon/ods";
-import { type ReactNode } from "react";
-import { useAccount } from "wagmi";
-import { useWeb3Modal } from "@web3modal/wagmi/react";
-import { Else, If, Then } from "@/components/if";
-import { PUB_APP_NAME } from "@/constants";
+import { RadialGradients } from "@/components/radial-gradients";
+import { Stake } from "@/plugins/stake/components/stake";
+import MultiplierChart from "@/plugins/stake/components/multiplier-chart";
+import { useGetBalance } from "@/plugins/stake/hooks/useGetBalance";
+import { Token } from "@/plugins/stake/types/tokens";
+import { formatUnits } from "viem";
+import { SectionHeader } from "@/plugins/stake/components/section-header";
+import { PUB_STAKING_LEARN_MORE_URL } from "@/constants";
+import GetMoreTokens from "@/plugins/stake/components/get-tokens-links";
+import Router from "next/router";
+import { Card } from "@aragon/ods";
 
 export default function StandardHome() {
-  const { isConnected } = useAccount();
-  const { open } = useWeb3Modal();
+  const token = Token.MAIN_TOKEN;
+  const { data } = useGetBalance(token);
+
+  const multVp = Math.max(data ? Number(formatUnits(data?.balance, data?.decimals)) : 1, 1);
 
   return (
-    <MainSection narrow>
-      <Card>
-        <h1 className="line-clamp-1 flex flex-1 shrink-0 text-2xl font-normal leading-tight text-neutral-800 md:text-3xl">
-          Welcome to {PUB_APP_NAME}
-        </h1>
-        <p className="text-md text-neutral-400">
-          A beaufitul DAO experience in a simple template that you can customize. Get started by connecting your wallet
-          and selecting a plugin from the menu.
-        </p>
-        <div className="">
-          <IllustrationHuman className="mx-auto mb-10 max-w-96" body="BLOCKS" expression="SMILE_WINK" hairs="CURLY" />
-          <div className="flex justify-center">
-            <If true={isConnected}>
-              <Then>
-                <Button className="mb-2" variant="primary" href="https://devs.aragon.org/" target="_blank">
-                  Learn more about OSx
-                </Button>
-              </Then>
-              <Else>
-                <Button size="md" variant="primary" onClick={() => open()}>
-                  <span>Connect wallet</span>
-                </Button>
-              </Else>
-            </If>
-          </div>
+    <div className="bg-gradient-to-b from-neutral-0 to-transparent">
+      <RadialGradients />
+
+      <MainSection>
+        <DashboardHeader />
+        <div className="mt-6">
+          <SectionHeader title="Stake" learnMoreUrl={PUB_STAKING_LEARN_MORE_URL}>
+            Stake your tokens to increase your voting power. The longer you stake, the higher your
+            voting power multiplier will be.
+          </SectionHeader>
+          <Card className="mt-8 grid w-full grid-cols-1 px-3 pb-5 md:grid-cols-2">
+            <div className="-mx-3">
+              <Stake onStake={() => Router.push("/plugins/stake")} />
+              <div className="mx-8 mb-2">
+                <GetMoreTokens />
+              </div>
+            </div>
+            <div className="mt-3 md:mt-12">
+              <MultiplierChart amount={multVp} token={token} />
+            </div>
+          </Card>
         </div>
-      </Card>
-    </MainSection>
-  );
-}
-
-// This should be encapsulated
-const Card = function ({ children }: { children: ReactNode }) {
-  return (
-    <div
-      className="xs:px-10 mb-6 box-border flex
-    w-full flex-col space-y-6
-    rounded-xl border border-neutral-100
-    bg-neutral-0 px-4 py-5 focus:outline-none focus:ring focus:ring-primary
-    md:px-6 lg:px-7"
-    >
-      {children}
+        <div className="md:mt-12">
+          <DashboardResources />
+        </div>
+      </MainSection>
     </div>
   );
-};
+}

@@ -4,11 +4,11 @@ import { PUB_MAIN_ESCROW_CONTRACT, PUB_MAIN_TOKEN_CONTRACT, PUB_SECONDARY_ESCROW
 import { Token } from "../types/tokens";
 
 export function getEscrowContract(token: Token) {
-  return token === Token.MODE ? PUB_MAIN_ESCROW_CONTRACT : PUB_SECONDARY_ESCROW_CONTRACT;
+  return token === Token.MAIN_TOKEN ? PUB_MAIN_ESCROW_CONTRACT : PUB_SECONDARY_ESCROW_CONTRACT;
 }
 
 export function getTokenContract(token: Token) {
-  return token === Token.MODE ? PUB_MAIN_TOKEN_CONTRACT : PUB_SECONDARY_TOKEN_CONTRACT;
+  return token === Token.MAIN_TOKEN ? PUB_MAIN_TOKEN_CONTRACT : PUB_SECONDARY_TOKEN_CONTRACT;
 }
 
 export function useGetContracts(token: Token) {

@@ -1,6 +1,10 @@
 import { Dialog, type IDialogRootProps } from "@aragon/ods";
 import Image from "next/image";
 import { NavLink, type INavLink } from "./navLink";
+import { BrandingSubline } from "./brandingSubline";
+import { PUB_APP_NAME, PUB_APP_NAME_SHORT } from "@/constants";
+
+const LOGO_PATH = "/tenderize-logo-yellow.png";
 
 interface IMobileNavDialogProps extends IDialogRootProps {
   navLinks: INavLink[];

@@ -13,8 +13,8 @@ export function DevTools() {
   const [days, setDays] = React.useState(0);
   const [open, setOpen] = React.useState(false);
 
-  const { mintToken: mintMainToken } = useMintToken(Token.MODE);
-  const { mintToken: mintSecondaryToken } = useMintToken(Token.BPT);
+  const { mintToken: mintMainToken } = useMintToken(Token.MAIN_TOKEN);
+  const { mintToken: mintSecondaryToken } = useMintToken(Token.SECONDARY_TOKEN);
   const { setTimestamp } = useSetTimestamp(ts);
   const { now } = useNow();
 
