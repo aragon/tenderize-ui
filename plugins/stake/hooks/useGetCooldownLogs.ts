@@ -4,7 +4,7 @@ import { decodeEventLog, getAbiItem } from "viem";
 import { ExitQueueAbi } from "@/artifacts/ExitQueue.sol";
 import { useQuery } from "wagmi/query";
 import { useGetContracts } from "./useGetContract";
-import { CONTRACTS_DEPLOYMENT_BLOCK } from "@/constants";
+import { PUB_CONTRACTS_DEPLOYMENT_BLOCK } from "@/constants";
 
 export function useGetCooldownLogs(token: Token) {
   const publicClient = usePublicClient();
@@ -26,7 +26,7 @@ export function useGetCooldownLogs(token: Token) {
         address: queueContract,
         event: ExitQueueEvent,
         args: { holder: address! },
-        fromBlock: CONTRACTS_DEPLOYMENT_BLOCK,
+        fromBlock: PUB_CONTRACTS_DEPLOYMENT_BLOCK,
         toBlock: "latest",
       }),
     select: (data) =>

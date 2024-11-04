@@ -35,11 +35,11 @@ export default function Create() {
     resources: filteredResources,
   });
 
-  const { data: modeContracts } = useGetContracts(Token.MAIN_TOKEN);
-  const { data: bptContracts } = useGetContracts(Token.SECONDARY_TOKEN);
+  const { data: mainContracts } = useGetContracts(Token.MAIN_TOKEN);
+  const { data: secContracts } = useGetContracts(Token.SECONDARY_TOKEN);
 
-  const modeVoterContract = modeContracts?.voterContract.result;
-  const bptVoterContract = bptContracts?.voterContract.result;
+  const mainVoterContract = mainContracts?.voterContract.result;
+  const secVoterContract = secContracts?.voterContract.result;
 
   const handleTitleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event?.target?.value);
@@ -87,8 +87,8 @@ export default function Create() {
 
   const createGauge = async () => {
     if (!isAddress(gaugeAddress ?? "")) return;
-    if (!modeVoterContract || !isAddress(modeVoterContract)) return;
-    if (!bptVoterContract || !isAddress(bptVoterContract)) return;
+    if (!mainVoterContract || !isAddress(mainVoterContract)) return;
+    if (!secVoterContract || !isAddress(secVoterContract)) return;
 
     uploadMetadata(undefined, {
       onSuccess: async (ipfsPin) => {
@@ -98,12 +98,12 @@ export default function Create() {
 
         setActions([
           {
-            to: modeVoterContract,
+            to: mainVoterContract,
             data: `0x071d2171000000000000000000000000${cleanedGaugeAddress}000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000${ipfsLength}${ipfsCid}000000000000000000000000000000000000000000000000000000000000`,
             value: 0n,
           },
           {
-            to: bptVoterContract,
+            to: secVoterContract,
             data: `0x071d2171000000000000000000000000${cleanedGaugeAddress}000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000${ipfsLength}${ipfsCid}000000000000000000000000000000000000000000000000000000000000`,
             value: 0n,
           },

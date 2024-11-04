@@ -4,6 +4,7 @@ import { useMintToken } from "../../hooks/useMintToken";
 import { useSetTimestamp } from "../../hooks/useSetTimestamp";
 import { Token } from "../../types/tokens";
 import { useNow } from "../../hooks/useNow";
+import { PUB_MAIN_TOKEN_NAME, PUB_SECONDARY_TOKEN_NAME } from "@/constants";
 
 export function DevTools() {
   const [ts, setTs] = React.useState(0n);
@@ -53,10 +54,10 @@ export function DevTools() {
         <DialogContent>
           <div className="grid grid-cols-2 gap-3 py-3">
             <Button onClick={() => mintMainToken(10n * 10n ** 24n)} variant="secondary" size="md">
-              Mint MODE
+              Mint {PUB_MAIN_TOKEN_NAME}
             </Button>
             <Button onClick={() => mintSecondaryToken(10n * 10n ** 24n)} variant="secondary" size="md">
-              Mint BPT
+              Mint {PUB_SECONDARY_TOKEN_NAME}
             </Button>
           </div>
           <InputNumber placeholder="0" value={days} label="days" onChange={(val) => setDays(Number(val))} />

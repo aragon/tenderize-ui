@@ -8,6 +8,7 @@ import { useGetAccountVp } from "../../hooks/useGetAccountVp";
 import { formatUnits } from "viem";
 import { useGetUsedVp } from "../../hooks/useGetUsedVp";
 import { useAccount } from "wagmi";
+import { PUB_MAIN_TOKEN_NAME, PUB_SECONDARY_TOKEN_NAME } from "@/constants";
 
 type VotingBarProps = {
   selectedGauges: GaugeItem[];
@@ -17,45 +18,45 @@ type VotingBarProps = {
 export const VotingBar: React.FC<VotingBarProps> = ({ selectedGauges, onRemove }) => {
   const { isConnected } = useAccount();
 
-  const { ownedTokens: modeOwnedTokensData } = useOwnedTokens(Token.MAIN_TOKEN);
-  const { ownedTokens: bptOwnedTokensData } = useOwnedTokens(Token.SECONDARY_TOKEN);
+  const { ownedTokens: mainOwnedTokensData } = useOwnedTokens(Token.MAIN_TOKEN);
+  const { ownedTokens: secOwnedTokensData } = useOwnedTokens(Token.SECONDARY_TOKEN);
 
-  const modeOwnedTokens = [...(modeOwnedTokensData ?? [])];
-  const bptOwnedTokens = [...(bptOwnedTokensData ?? [])];
+  const mainOwnedTokens = [...(mainOwnedTokensData ?? [])];
+  const secOwnedTokens = [...(secOwnedTokensData ?? [])];
 
-  const { data: usedModeVp } = useGetUsedVp(Token.MAIN_TOKEN, modeOwnedTokens);
-  const { data: usedBptVp } = useGetUsedVp(Token.SECONDARY_TOKEN, bptOwnedTokens);
+  const { data: usedMainVp } = useGetUsedVp(Token.MAIN_TOKEN, mainOwnedTokens);
+  const { data: usedSecVp } = useGetUsedVp(Token.SECONDARY_TOKEN, secOwnedTokens);
 
-  const { vp: modeVpBn } = useGetAccountVp(Token.MAIN_TOKEN);
-  const { vp: bptVpBn } = useGetAccountVp(Token.SECONDARY_TOKEN);
+  const { vp: mainVpBn } = useGetAccountVp(Token.MAIN_TOKEN);
+  const { vp: secVpBn } = useGetAccountVp(Token.SECONDARY_TOKEN);
 
   if (!isConnected) {
     return null;
   }
 
-  const hasVp = !(modeVpBn === 0n && bptVpBn === 0n);
+  const hasVp = !(mainVpBn === 0n && secVpBn === 0n);
 
-  const modeVp = formatUnits(modeVpBn ?? 0n, 18);
-  const bptVp = formatUnits(bptVpBn ?? 0n, 18);
+  const mainVp = formatUnits(mainVpBn ?? 0n, 18);
+  const secVp = formatUnits(secVpBn ?? 0n, 18);
 
-  const formattedModeVp = formatterUtils.formatNumber(modeVp, {
+  const formattedMainVp = formatterUtils.formatNumber(mainVp, {
     format: NumberFormat.TOKEN_AMOUNT_SHORT,
   });
-  const formattedBptVp = formatterUtils.formatNumber(bptVp, {
+  const formattedSecVp = formatterUtils.formatNumber(secVp, {
     format: NumberFormat.TOKEN_AMOUNT_SHORT,
   });
 
-  const modePercentage = Number(modeVp) ? Number(formatUnits(usedModeVp ?? 0n, 18)) / Number(modeVp) : 0;
-  const bptPercentage = Number(bptVp) ? Number(formatUnits(usedBptVp ?? 0n, 18)) / Number(bptVp) : 0;
+  const mainPercentage = Number(mainVp) ? Number(formatUnits(usedMainVp ?? 0n, 18)) / Number(mainVp) : 0;
+  const secPercentage = Number(secVp) ? Number(formatUnits(usedSecVp ?? 0n, 18)) / Number(secVp) : 0;
 
-  const formattedModePercentage = formatterUtils.formatNumber(modePercentage, {
+  const formattedMainPercentage = formatterUtils.formatNumber(mainPercentage, {
     format: NumberFormat.PERCENTAGE_SHORT,
   });
-  const formattedBptPercentage = formatterUtils.formatNumber(bptPercentage, {
+  const formattedSecPercentage = formatterUtils.formatNumber(secPercentage, {
     format: NumberFormat.PERCENTAGE_SHORT,
   });
 
-  const voted = (usedModeVp ?? 0n) > 0n || (usedBptVp ?? 0n) > 0n;
+  const voted = (usedMainVp ?? 0n) > 0n || (usedSecVp ?? 0n) > 0n;
 
   return (
     <div className="sticky -bottom-2 -mb-12 md:-mx-8">
@@ -64,14 +65,18 @@ export const VotingBar: React.FC<VotingBarProps> = ({ selectedGauges, onRemove }
           <p className="title flex text-sm text-neutral-900">Your total voting power</p>
           <div className="flex flex-grow flex-row gap-8">
             <div className="flex flex-row items-center gap-2">
-              <Avatar alt="Gauge icon" size="sm" responsiveSize={{ md: "sm" }} src="/mode-token-icon.png" />
-              <p className="text-md md:text-base">{formattedModeVp} Mode</p>
-              {modePercentage > 0 && <p className="hidden sm:block">({formattedModePercentage} used)</p>}
+              <Avatar alt="Gauge icon" size="sm" responsiveSize={{ md: "sm" }} src="/main-token-icon.png" />
+              <p className="text-md md:text-base">
+                {formattedMainVp} {PUB_MAIN_TOKEN_NAME}
+              </p>
+              {mainPercentage > 0 && <p className="hidden sm:block">({formattedMainPercentage} used)</p>}
             </div>
             <div className="flex flex-row items-center gap-2">
-              <Avatar alt="Gauge icon" size="sm" responsiveSize={{ md: "sm" }} src="/bpt-token-icon.png" />
-              <p className="text-md md:text-base">{formattedBptVp} BPT</p>
-              {bptPercentage > 0 && <p className="hidden sm:block">({formattedBptPercentage} used)</p>}
+              <Avatar alt="Gauge icon" size="sm" responsiveSize={{ md: "sm" }} src="/secondary-token-icon.png" />
+              <p className="text-md md:text-base">
+                {formattedSecVp} {PUB_SECONDARY_TOKEN_NAME}
+              </p>
+              {secPercentage > 0 && <p className="hidden sm:block">({formattedSecPercentage} used)</p>}
             </div>
           </div>
 

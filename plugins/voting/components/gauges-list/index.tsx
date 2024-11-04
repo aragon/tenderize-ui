@@ -15,13 +15,13 @@ export const StakePositions = () => {
   const [searchValue, setSearchValue] = useState("");
   const [selectedGauges, setSelectedGauges] = useState<GaugeItem[]>([]);
 
-  const { gauges: modeGauges } = useGetGauges(Token.MAIN_TOKEN);
-  const { gauges: bptGauges } = useGetGauges(Token.SECONDARY_TOKEN);
+  const { gauges: mainGauges } = useGetGauges(Token.MAIN_TOKEN);
+  const { gauges: secGauges } = useGetGauges(Token.SECONDARY_TOKEN);
 
-  const { data: modeInfo } = useGetGaugesInfo(Token.MAIN_TOKEN, (modeGauges as Address[]) ?? []);
-  const { data: bptInfo } = useGetGaugesInfo(Token.SECONDARY_TOKEN, (bptGauges as Address[]) ?? []);
+  const { data: mainInfo } = useGetGaugesInfo(Token.MAIN_TOKEN, (mainGauges as Address[]) ?? []);
+  const { data: secInfo } = useGetGaugesInfo(Token.SECONDARY_TOKEN, (secGauges as Address[]) ?? []);
 
-  const gaugesData = [...(modeInfo ?? []), ...(bptInfo ?? [])];
+  const gaugesData = [...(mainInfo ?? []), ...(secInfo ?? [])];
 
   const gaugesInfo = (gaugesData ?? []).filter((gauge) => gauge.info?.active);
 
@@ -35,16 +35,16 @@ export const StakePositions = () => {
     };
   }) as GaugeItem[];
 
-  const { data: totalModeVotesData } = useGetTotalGaugeVotes(
+  const { data: totalMainVotesData } = useGetTotalGaugeVotes(
     Token.MAIN_TOKEN,
     allGauges.filter((gauge) => gauge.token === Token.MAIN_TOKEN).map((gauge) => gauge.address)
   );
-  const { data: totalBptVotesData } = useGetTotalGaugeVotes(
+  const { data: totalSecVotesData } = useGetTotalGaugeVotes(
     Token.SECONDARY_TOKEN,
     allGauges.filter((gauge) => gauge.token === Token.SECONDARY_TOKEN).map((gauge) => gauge.address)
   );
 
-  const totalVotesBn = (totalModeVotesData ?? 0n) + (totalBptVotesData ?? 0n);
+  const totalVotesBn = (totalMainVotesData ?? 0n) + (totalSecVotesData ?? 0n);
 
   const isLoading = false;
 

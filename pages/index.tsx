@@ -1,7 +1,6 @@
 import { DashboardHeader } from "@/components/dashboard/header";
 import { DashboardResources } from "@/components/dashboard/resources";
 import { MainSection } from "@/components/layout/main-section";
-import { RadialGradients } from "@/components/radial-gradients";
 import { Stake } from "@/plugins/stake/components/stake";
 import MultiplierChart from "@/plugins/stake/components/multiplier-chart";
 import { useGetBalance } from "@/plugins/stake/hooks/useGetBalance";
@@ -21,8 +20,6 @@ export default function StandardHome() {
 
   return (
     <div className="bg-gradient-to-b from-neutral-0 to-transparent">
-      <RadialGradients />
-
       <MainSection>
         <DashboardHeader />
         <div className="mt-6">
